@@ -1,0 +1,5 @@
+| Function | SQL                      | Return        |
+
+| Query    | SELECT banyak data       | banyak row    |
+| QueryRow | SELECT satu data         | satu row      |
+| Exec     | INSERT / UPDATE / DELETE | tidak ada row |
