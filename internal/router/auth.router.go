@@ -7,14 +7,23 @@ import (
 	"github.com/virgilIw/final-fase3/internal/controller"
 	"github.com/virgilIw/final-fase3/internal/repository"
 	"github.com/virgilIw/final-fase3/internal/service"
+	"github.com/virgilIw/final-fase3/pkg/hash"
 )
 
 func AuthRouter(app *gin.Engine, db *pgxpool.Pool, rdb *redis.Client) {
 	authRouter := app.Group("/auth")
 
+	hashConfig := hash.NewHashConfig(
+		64*1024, // memory (64 MB)
+		3,       // iterations
+		2,       // parallelism
+		16,      // salt length
+		32,      // key length
+	)
+
 	authRepository := repository.NewAuthRepository()
-	authService := service.NewAuthService(authRepository, rdb, db)
+	authService := service.NewAuthService(authRepository, rdb, db, hashConfig)
 	authController := controller.NewAuthController(authService)
-	authRouter.POST("/", authController.Login)
-	authRouter.POST("/new", authController.Register)
+	authRouter.POST("login", authController.Login)
+	authRouter.POST("register", authController.Register)
 }

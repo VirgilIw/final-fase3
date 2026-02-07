@@ -10,6 +10,7 @@ import (
 	"github.com/virgilIw/final-fase3/internal/dto"
 	"github.com/virgilIw/final-fase3/internal/repository"
 	"github.com/virgilIw/final-fase3/pkg/hash"
+	pkg "github.com/virgilIw/final-fase3/pkg/jwt"
 )
 
 type AuthService struct {
@@ -51,21 +52,27 @@ func (as *AuthService) Register(ctx context.Context, req dto.RegisterRequest) er
 }
 
 // LOGIN (password dibandingkan dengan hash)
-func (as *AuthService) Login(ctx context.Context, req dto.LoginRequest) error {
+func (as *AuthService) Login(ctx context.Context, req dto.LoginRequest) (string, error) {
 
 	account, err := as.authRepository.Login(ctx, as.db, req)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	isMatch, err := as.hashConfig.ComparePwdAndHash(req.Password, account.Password)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if !isMatch {
-		return errors.New("invalid email or password")
+		return "", errors.New("invalid email or password")
 	}
-	return nil
+	claims := pkg.NewJWTClaims(account.ID, account.Role)
+	token, err := claims.GenToken()
+
+	if err != nil {
+		return "", err
+	}
+	return token, nil
 }

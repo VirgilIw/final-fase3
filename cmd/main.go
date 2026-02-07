@@ -5,13 +5,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	_ "github.com/virgilIw/final-fase3/docs"
 	"github.com/virgilIw/final-fase3/internal/config"
 	"github.com/virgilIw/final-fase3/internal/router"
 )
 
-// @title						Solid Coffee Backend
+// @title						social media Backend
 // @version						1.0
-// @description					Solid Coffee Backend RESTful API
+// @description					Social media Backend RESTful API
 // @host						localhost:8080
 // @BasePath					/
 // @securityDefinitions.apikey	BearerAuth

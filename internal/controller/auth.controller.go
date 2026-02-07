@@ -72,10 +72,57 @@ func (r *AuthController) Register(c *gin.Context) {
 		})
 		return
 	}
-
-	c.JSON(http.StatusOK, dto.Response{
+	c.JSON(http.StatusCreated, dto.Response{
 		Msg:     "Registered Success",
 		Success: true,
 		Data:    []any{},
+	})
+}
+
+// Login godoc
+//
+//	@Summary		Login user
+//	@Description	Login user account
+//	@Tags			Auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		dto.LoginRequest	true	"Login request"
+//	@Success		200		{object}	dto.Response
+//	@Failure		400		{object}	dto.Response
+//	@Failure		500		{object}	dto.Response
+//	@Router			/auth/login [post]
+func (l *AuthController) Login(c *gin.Context) {
+	var req dto.LoginRequest
+
+	err1 := c.ShouldBindJSON(&req)
+	if err1 != nil {
+		c.JSON(http.StatusBadRequest, dto.Response{
+			Msg:     "Bad Request",
+			Success: false,
+			Data:    []any{},
+			Error:   err1.Error(),
+		})
+		return
+	}
+
+	token, err2 := l.authService.Login(c.Request.Context(), req)
+	if err2 != nil {
+		c.JSON(http.StatusInternalServerError, dto.Response{
+			Msg:     "Failed to login",
+			Success: false,
+			Data:    []any{},
+			Error:   err2.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, dto.Response{
+		Msg:     "Login Success",
+		Success: true,
+		Data: []any{
+			gin.H{
+				"token": token,
+			},
+		},
 	})
 }
