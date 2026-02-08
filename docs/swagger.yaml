@@ -105,6 +105,78 @@ paths:
       summary: Register new user
       tags:
       - Auth
+  /profile/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get user account by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Response'
+      summary: Get user profile
+      tags:
+      - Profile
+  /profile/input:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Update user profile with name, bio, and profile image
+      parameters:
+      - description: User name
+        in: formData
+        name: user_name
+        required: true
+        type: string
+      - description: User biography
+        in: formData
+        name: user_bio
+        type: string
+      - description: Profile image (jpg, jpeg, png)
+        in: formData
+        name: user_image
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Response'
+      security:
+      - BearerAuth: []
+      summary: Input / Update Profile
+      tags:
+      - Profile
 securityDefinitions:
   BearerAuth:
     description: Type "Bearer" followed by a space and JWT token.

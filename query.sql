@@ -6,6 +6,7 @@ CREATE TABLE account (
 
 -- CREATE TYPE user_role AS ENUM ('admin', 'user');
 
+
 -- ALTER TABLE account
 -- ADD COLUMN role user_role;
 
@@ -19,6 +20,10 @@ CREATE TABLE users (
     user_image VARCHAR(255),
     user_bio VARCHAR(255)
 );
+
+-- ALTER TABLE users
+-- ADD COLUMN created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+-- ADD COLUMN updated_at TIMESTAMP NOT NULL DEFAULT NOW();
 
 CREATE TABLE posts (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

@@ -4,8 +4,6 @@ import (
 	"context"
 	"log"
 
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/virgilIw/final-fase3/internal/dto"
 	"github.com/virgilIw/final-fase3/internal/model"
 )
@@ -21,12 +19,6 @@ type AuthRepository struct{}
 
 func NewAuthRepository() *AuthRepository {
 	return &AuthRepository{}
-}
-
-type DBTX interface {
-	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
-	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
-	Exec(ctx context.Context, sql string, arguments ...any) (pgconn.CommandTag, error)
 }
 
 func (r *AuthRepository) Register(ctx context.Context, db DBTX, req dto.RegisterRequest) error {

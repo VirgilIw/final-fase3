@@ -12,5 +12,6 @@ import (
 func Init(app *gin.Engine, db *pgxpool.Pool, rdb *redis.Client) {
 	app.Use(middleware.CORSMiddleware())
 	AuthRouter(app, db, rdb)
+	ProfileRouter(app, db, rdb)
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

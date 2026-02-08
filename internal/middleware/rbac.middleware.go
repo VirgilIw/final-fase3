@@ -52,6 +52,7 @@ func UserOnly(c *gin.Context) {
 		})
 		return
 	}
+
 	accessToken, ok := token.(pkg.JwtClaims)
 	if !ok {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, dto.Response{
@@ -62,6 +63,10 @@ func UserOnly(c *gin.Context) {
 		})
 		return
 	}
+
+	// 👇 TAMBAH INI
+	println("ROLE FROM TOKEN:", accessToken.Role)
+
 	if accessToken.Role != "user" {
 		c.AbortWithStatusJSON(http.StatusForbidden, dto.Response{
 			Msg:     "Forbidden Access",
@@ -71,5 +76,6 @@ func UserOnly(c *gin.Context) {
 		})
 		return
 	}
+
 	c.Next()
 }
